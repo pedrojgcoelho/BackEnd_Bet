@@ -1,7 +1,6 @@
 package br.uni.unibet.UniBet.model;
 
 import java.util.ArrayList;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
