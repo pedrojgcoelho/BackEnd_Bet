@@ -1,41 +1,67 @@
 package br.uni.unibet.UniBet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.uni.unibet.UniBet.model.Time;
-import br.uni.unibet.UniBet.model.dao.TimeDAO;
-import lombok.var;
+import br.uni.unibet.UniBet.service.TimeService;
+
 
 @RestController
 @RequestMapping("/time")
 public class TimeController {
 
     @Autowired
-    TimeDAO tDao;
-    private TimeDAO  dTime;
-
-    public TimeController(TimeDAO dTime) {
-        this.dTime = dTime;
-    }
+    TimeService timeServ;
 
     @PostMapping("/")
-    public ResponseEntity<?> saveTime(@RequestBody Time time){
-
-        if (time.getNome().isEmpty() || time.getNome().isBlank()){
-            return ResponseEntity.badRequest().body("Sem Time.");
+    public ResponseEntity<?> saveTime(@RequestBody(required = true) Time time){
+        try {
+            Time timeResp = timeServ.verificaSalvamento(time);
+            return ResponseEntity.status(HttpStatus.CREATED).body(timeResp);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        var existingTime = this.dTime.findByNome(time.getNome());
+    }
 
-        if (existingTime != null) {
-            return ResponseEntity.badRequest().body("Esse time já existe"); 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> apagarTime( @PathVariable(required = true)  int id) {
+        try {
+            timeServ.apagaTime(id);
+            return ResponseEntity.ok("Time apagado com sucesso");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        var createdTime = this.dTime.save(time);
-        return ResponseEntity.ok(createdTime);
+    }
 
+
+    @GetMapping
+    public ResponseEntity<?> retornaTimes(){
+        return  ResponseEntity.ok(  timeServ.buscarTodos()  );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> retornaTimes( @PathVariable(required = true) int id){
+        return  ResponseEntity.ok(  timeServ.buscar(id)  );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> alteraTime(@PathVariable(required = true) int id,
+                                        @RequestBody Time time){
+        try {
+            Time t = timeServ.alteraTime(id, time);
+            return ResponseEntity.ok(t);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
+
