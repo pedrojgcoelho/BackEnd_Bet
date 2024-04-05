@@ -22,8 +22,12 @@ public class Usuario {
     private String nome, login, senha, email;
     private double saldo;
     private boolean ehAdmin;
-    @OneToMany
     
-
+    @OneToMany
     private ArrayList<Aposta> minhasApostas;
+    public void sacar(double valorAposta) {
+        if (valorAposta > 0 && valorAposta <= saldo){
+            saldo -= valorAposta;
+        }
+    }
 }
