@@ -1,7 +1,9 @@
 package br.uni.unibet.UniBet.controller;
 
+
 import br.uni.unibet.UniBet.model.Aposta;
 import br.uni.unibet.UniBet.model.DTO.ApostaInputDTO;
+import br.uni.unibet.UniBet.model.DTO.ApostaViewDTO;
 import br.uni.unibet.UniBet.service.ApostaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +30,16 @@ public class ApostaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> retornaAposta( @PathVariable Integer id){
-        
-        Aposta a = apoServ.getAposta(id);
-        
-        
+        try {
+            ApostaViewDTO a = apoServ.getAposta(id);
+            return ResponseEntity.ok(a);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<?> getApostasUSuario(@PathVariable Integer id){
+
+        List<ApostaViewDTO> lista = apoServ.getApostaUsuario(id);
 }

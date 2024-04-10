@@ -1,14 +1,10 @@
 package br.uni.unibet.UniBet.model;
 
-import java.util.ArrayList;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,10 +15,11 @@ public class Time {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String nome;
-
+    
     @OneToMany(mappedBy = "timeA")
-    private ArrayList<Jogo> jogoA;
+    private List<Jogo> jogosA;
 
     @OneToMany(mappedBy = "timeB")
-    private ArrayList<Jogo> jogoB;
+    private List<Jogo> jogosB;
+
 }

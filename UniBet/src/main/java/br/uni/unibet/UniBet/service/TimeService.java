@@ -20,7 +20,7 @@ public class TimeService {
         }
         Time t = tDao.findByNome(time.getNome());
         if (t != null){
-            throw new Exception("time "+t.getNome()+" já está cadastrado");
+            throw new Exception("time "+t.getNome()+" já cadastrado");
         } else {
             return tDao.save(time);
         }

@@ -2,6 +2,7 @@ package br.uni.unibet.UniBet.service;
 
 import br.uni.unibet.UniBet.model.Aposta;
 import br.uni.unibet.UniBet.model.DTO.ApostaInputDTO;
+import br.uni.unibet.UniBet.model.DTO.ApostaViewDTO;
 import br.uni.unibet.UniBet.model.Jogo;
 import br.uni.unibet.UniBet.model.Usuario;
 import br.uni.unibet.UniBet.model.dao.ApostaDAO;
@@ -48,4 +49,30 @@ public class ApostaService {
         udao.save( uExiste.get() );
 
     }
+
+    public ApostaViewDTO getAposta(Integer id) throws Exception {
+
+        Optional<Aposta> aposta = adao.findById(id);
+        if (! aposta.isPresent()){
+            throw new Exception("Aposta "+id+" não encontrada");
+        }
+        ApostaViewDTO ap = new ApostaViewDTO();
+        ap.setId( aposta.get().getId() );
+        ap.setDataJogo( aposta.get().getJogo().getDataJogo() );
+        ap.setValorAposta( aposta.get().getValorAposta() );
+        ap.setIdJogador( aposta.get().getJogador().getId() );
+        ap.setIdTime1( aposta.get().getJogo().getTimeA().getId() );
+        ap.setIdTime2( aposta.get().getJogo().getTimeB().getId() );
+        ap.setNomeJogador( aposta.get().getJogador().getNome() );
+        ap.setTime1( aposta.get().getJogo().getTimeA().getNome() );
+        ap.setTime2( aposta.get().getJogo().getTimeB().getNome() );
+        ap.setResultadoApostado( aposta.get().getAposta() );
+        ap.setResultadoJogo( aposta.get().getJogo().getResultado() );
+        ap.setAcertou( aposta.get().getAposta() == aposta.get().getJogo().getResultado() );
+
+        return ap;
+    }
+    public List<ApostaViewDTO> getApostaUsuario(Integer id) {
+        
+        ta = adao.findbyJogadorIdAndJogoResultado(id, ETipoResultado.AGAUARDANDO);
 }

@@ -1,15 +1,10 @@
 package br.uni.unibet.UniBet.model;
 
-import java.util.ArrayList;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,9 +17,10 @@ public class Usuario {
     private String nome, login, senha, email;
     private double saldo;
     private boolean ehAdmin;
-    
+
     @OneToMany
-    private ArrayList<Aposta> minhasApostas;
+    private List<Aposta> minhasApostas;
+
     public void sacar(double valorAposta) {
         if (valorAposta > 0 && valorAposta <= saldo){
             saldo -= valorAposta;
