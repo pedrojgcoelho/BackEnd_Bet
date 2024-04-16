@@ -1,7 +1,6 @@
 package br.uni.unibet.UniBet.controller;
 
 import br.uni.unibet.UniBet.model.Time;
-import br.uni.unibet.UniBet.model.dao.TimeDAO;
 import br.uni.unibet.UniBet.service.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -3,6 +3,7 @@ package br.uni.unibet.UniBet.service;
 import br.uni.unibet.UniBet.model.Aposta;
 import br.uni.unibet.UniBet.model.DTO.ApostaInputDTO;
 import br.uni.unibet.UniBet.model.DTO.ApostaViewDTO;
+import br.uni.unibet.UniBet.model.ETipoResultado;
 import br.uni.unibet.UniBet.model.Jogo;
 import br.uni.unibet.UniBet.model.Usuario;
 import br.uni.unibet.UniBet.model.dao.ApostaDAO;
@@ -10,8 +11,9 @@ import br.uni.unibet.UniBet.model.dao.JogoDAO;
 import br.uni.unibet.UniBet.model.dao.UsuarioDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,7 +28,6 @@ public class ApostaService {
 
     public void criaAposta(ApostaInputDTO aposta) throws Exception {
 
-        //Verificar se o apostador existe
         Optional<Usuario> uExiste = udao.findById( aposta.getIdApostador() );
         if( !uExiste.isPresent() ){
             throw new Exception("Usuário não encontrado!!!");
@@ -72,7 +73,38 @@ public class ApostaService {
 
         return ap;
     }
+
     public List<ApostaViewDTO> getApostaUsuario(Integer id) {
         
-        ta = adao.findbyJogadorIdAndJogoResultado(id, ETipoResultado.AGAUARDANDO);
+          List<Aposta>  lista = adao.findbyJogadorAndJogoResultado(id, ETipoResultado.AGUARDANDO);
+        List<ApostaViewDTO> listaDTO = new ArrayList<>();
+        for (Aposta a : lista ) {
+            ApostaViewDTO ap = new ApostaViewDTO();
+            ap.setId( a.getId() );
+            ap.setDataJogo( a.getJogo().getDataJogo() );
+            ap.setValorAposta( a.getValorAposta() );
+            ap.setIdJogador( a.getJogador().getId() );
+            ap.setIdTime1( a.getJogo().getTimeA().getId() );
+            ap.setIdTime2( a.getJogo().getTimeB().getId() );
+            ap.setNomeJogador( a.getJogador().getNome() );
+            ap.setTime1( a.getJogo().getTimeA().getNome() );
+            ap.setTime2( a.getJogo().getTimeB().getNome() );
+            ap.setResultadoApostado( a.getAposta() );
+            ap.setResultadoJogo( a.getJogo().getResultado() );
+            ap.setAcertou( a.getAposta() == a.getJogo().getResultado() );
+
+            listaDTO.add(ap);
+        }
+
+        return listaDTO;
+
+    }
+
+    public Object getCountApostaUsuario(Integer id) throws Exception {
+        Optional<Usuario> uExiste = udao.findById( id );
+        if( !uExiste.isPresent() ){
+            throw new Exception("Usuário não encontrado!!!");
+        }
+        return adao.countByJogadorId(id);
+    }
 }

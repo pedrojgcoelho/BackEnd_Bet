@@ -18,6 +18,6 @@ public class Aposta {
     private Usuario jogador;
     @ManyToOne
     private Jogo jogo;    
-    private ETipoResultado aposta;
+    private ETipoResultado  aposta;
     
 }
