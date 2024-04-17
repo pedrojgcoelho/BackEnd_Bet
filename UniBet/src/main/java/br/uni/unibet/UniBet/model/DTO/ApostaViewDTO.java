@@ -1,11 +1,13 @@
 package br.uni.unibet.UniBet.model.DTO;
 
+
+import java.time.LocalDateTime;
+
 import br.uni.unibet.UniBet.model.ETipoResultado;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -24,6 +26,4 @@ public class ApostaViewDTO {
     private ETipoResultado resultadoJogo;
     private ETipoResultado resultadoApostado;
     private boolean acertou;
-
-
 }

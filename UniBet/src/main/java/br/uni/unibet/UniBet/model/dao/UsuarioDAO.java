@@ -1,11 +1,11 @@
 package br.uni.unibet.UniBet.model.dao;
 
-import br.uni.unibet.UniBet.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import br.uni.unibet.UniBet.model.Usuario;
+
 public interface UsuarioDAO extends JpaRepository<Usuario, Integer> {
-    public static final UsuarioDAO usuarioDAO = null;
+    Usuario findByEmail(String email);
 
-    public boolean existsByNome(String nome);
-
+    Usuario findByLogin(String login);
 }

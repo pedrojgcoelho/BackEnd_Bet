@@ -12,48 +12,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.uni.unibet.UniBet.model.Time;
-import br.uni.unibet.UniBet.service.TimeService;
+import br.uni.unibet.UniBet.model.DTO.UsuarioCreateDTO;
+import br.uni.unibet.UniBet.model.DTO.UsuarioUpdateDTO;
+import br.uni.unibet.UniBet.model.DTO.UsuarioViewDTO;
+import br.uni.unibet.UniBet.service.UsuarioService;
 
 @RestController
-@RequestMapping("/time")
-public class TimeController {
+@RequestMapping("/usuario")
+public class UsuarioController {
 
-    private TimeService sTime;
+    private UsuarioService sUsuario;
 
-    public TimeController(TimeService sTime) {
-        this.sTime = sTime;
+    public UsuarioController(UsuarioService sUsuario) {
+        this.sUsuario = sUsuario;
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> saveTime(@RequestBody(required = true) Time time) {
+    public ResponseEntity<?> saveUsuario(@RequestBody(required = true) UsuarioCreateDTO usuario) {
         try {
-            Time savedTime = this.sTime.verificaSalvamento(time);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedTime);
+            this.sUsuario.verificaSalvamento(usuario);
+            return ResponseEntity.ok(HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllTimes() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.sTime.getAllTimes());
+    public ResponseEntity<?> getAllUsuarios() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.sUsuario.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTime(@PathVariable(required = true) int id) {
+    public ResponseEntity<?> getUsuario(@PathVariable(required = true) int id) {
         try {
-            Time time = this.sTime.getTime(id);
-            return ResponseEntity.status(HttpStatus.OK).body(time);
+            UsuarioViewDTO usuario = this.sUsuario.getUser(id);
+            return ResponseEntity.status(HttpStatus.OK).body(usuario);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTime(@PathVariable(required = true) int id) {
+    public ResponseEntity<?> deleteUsuario(@PathVariable(required = true) int id) {
         try {
-            this.sTime.deleteTime(id);
+            this.sUsuario.deleteUser(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -61,11 +63,11 @@ public class TimeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTime(@PathVariable(required = true) int id,
-            @RequestBody Time time) {
+    public ResponseEntity<?> updateUsuario(@PathVariable(required = true) int id,
+            @RequestBody UsuarioUpdateDTO usuario) {
         try {
-            Time t = sTime.updateTime(id, time);
-            return ResponseEntity.ok(t);
+            sUsuario.updateUser(id, usuario);
+            return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

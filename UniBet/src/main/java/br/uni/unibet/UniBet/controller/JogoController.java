@@ -1,7 +1,5 @@
 package br.uni.unibet.UniBet.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,21 +9,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import br.uni.unibet.UniBet.model.DTO.ApostaInputDTO;
-import br.uni.unibet.UniBet.model.DTO.ApostaViewDTO;
-import br.uni.unibet.UniBet.service.ApostaService;
+import br.uni.unibet.UniBet.model.Jogo;
+import br.uni.unibet.UniBet.model.DTO.JogoInputDTO;
+import br.uni.unibet.UniBet.model.DTO.JogoUpdateDTO;
+import br.uni.unibet.UniBet.model.DTO.JogoViewDTO;
+import br.uni.unibet.UniBet.service.JogoService;
 
 @RestController
-@RequestMapping("/aposta")
-public class ApostaController {
+@RequestMapping("/jogo")
+public class JogoController {
 
     @Autowired
-    ApostaService apoServ;
+    JogoService jogoServ;
 
-    @PostMapping()
-    public ResponseEntity<?> criaAposta(@RequestBody ApostaInputDTO aposta) {
+    @PostMapping("/")
+    public ResponseEntity<?> criaJogo(@RequestBody JogoInputDTO jogo) {
         try {
-            apoServ.criaAposta(aposta);
+            jogoServ.criarJogo(jogo);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -33,29 +33,22 @@ public class ApostaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> retornaAposta(@PathVariable Integer id) {
+    public ResponseEntity<?> retornaJogo(@PathVariable Integer id) {
         try {
-            ApostaViewDTO a = apoServ.getAposta(id);
+            JogoViewDTO a = jogoServ.getJogo(id);
             return ResponseEntity.ok(a);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/usuario/{id}")
-    public ResponseEntity<?> getApostasUSuario(@PathVariable Integer id) {
-
-        List<ApostaViewDTO> lista = apoServ.getApostaUsuario(id);
-        return ResponseEntity.ok(lista);
-    }
-
-    @GetMapping("/usuario/{id}/count")
-    public ResponseEntity<?> getApostasUsuarioCount(@PathVariable Integer id) {
+    @PostMapping("/{id}")
+    public ResponseEntity<?> atualizarJogo(@PathVariable Integer id, @RequestBody JogoUpdateDTO jogo) {
         try {
-            return ResponseEntity.ok(apoServ.getCountApostaUsuario(id));
+            jogoServ.atualizarJogo(id, jogo);
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
-
 }
