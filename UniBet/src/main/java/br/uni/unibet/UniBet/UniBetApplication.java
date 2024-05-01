@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.time.LocalDateTime;
 
-@SpringBootApplication
+import java.time.LocalDateTime;
+import java.util.Scanner;
+
+@SpringBootApplication //(exclude={DataSourceAutoConfiguration.class})
 public class UniBetApplication  implements CommandLineRunner {
 
 	public static void main(String[] args) {
@@ -30,8 +32,8 @@ public class UniBetApplication  implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.out.println("###### iniciando carregamento dos dados");
 
-		Time time = new Time(1, "Cruzeiro",null,null);
-		Time time1 = new Time(2, "Patético",null,null);
+		Time time = new Time(1, "São Paulo FC");
+		Time time1 = new Time(2, "Flamengo");
 		dTime.save(time);
 		dTime.save(time1);
 

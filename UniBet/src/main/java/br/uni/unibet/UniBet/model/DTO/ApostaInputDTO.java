@@ -1,8 +1,6 @@
 package br.uni.unibet.UniBet.model.DTO;
 
-
 import br.uni.unibet.UniBet.model.ETipoResultado;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,19 +1,16 @@
 package br.uni.unibet.UniBet.controller;
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import br.uni.unibet.UniBet.model.Aposta;
 import br.uni.unibet.UniBet.model.DTO.ApostaInputDTO;
 import br.uni.unibet.UniBet.model.DTO.ApostaViewDTO;
 import br.uni.unibet.UniBet.service.ApostaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/aposta")
@@ -23,9 +20,9 @@ public class ApostaController {
     ApostaService apoServ;
 
     @PostMapping()
-    public ResponseEntity<?> criaAposta(@RequestBody ApostaInputDTO aposta) {
+    public ResponseEntity<?> criaAposta( @RequestBody ApostaInputDTO aposta){
         try {
-            apoServ.criaAposta(aposta);
+            apoServ.criaAposta( aposta );
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -33,7 +30,7 @@ public class ApostaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> retornaAposta(@PathVariable Integer id) {
+    public ResponseEntity<?> retornaAposta( @PathVariable Integer id){
         try {
             ApostaViewDTO a = apoServ.getAposta(id);
             return ResponseEntity.ok(a);
@@ -43,19 +40,34 @@ public class ApostaController {
     }
 
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<?> getApostasUSuario(@PathVariable Integer id) {
-
-        List<ApostaViewDTO> lista = apoServ.getApostaUsuario(id);
-        return ResponseEntity.ok(lista);
+    public ResponseEntity<?> getApostasUsuario(@PathVariable Integer id){
+        return ResponseEntity.ok( apoServ.getApostaUsuario(id) );
     }
 
     @GetMapping("/usuario/{id}/count")
-    public ResponseEntity<?> getApostasUsuarioCount(@PathVariable Integer id) {
+    public ResponseEntity<?> getApostasUsuarioCount(@PathVariable Integer id){
         try {
-            return ResponseEntity.ok(apoServ.getCountApostaUsuario(id));
+            return ResponseEntity.ok( apoServ.getCountApostaUsuario(id) );
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/{id}/resultado")
+    public ResponseEntity<?> getValorRecebido(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok( apoServ.getValorRecebidoAposta(id) );
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    
+    
+    
+    
+    
+    
+    
 
 }
