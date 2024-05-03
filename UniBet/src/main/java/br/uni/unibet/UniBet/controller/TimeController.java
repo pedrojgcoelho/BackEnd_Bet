@@ -16,7 +16,7 @@ public class TimeController {
     @Autowired
     TimeService timeServ;
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> saveTime(@RequestBody(required = true) Time time){
         try {
             Time timeResp = timeServ.verificaSalvamento(time);
@@ -27,7 +27,7 @@ public class TimeController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> apagarTime( @PathVariable(required = true)  int id) {
         try {
             timeServ.apagaTime(id);
@@ -51,7 +51,7 @@ public class TimeController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> alteraTime(@PathVariable(required = true) int id,
                                         @RequestBody Time time){
         try {
